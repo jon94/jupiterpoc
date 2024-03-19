@@ -58,9 +58,6 @@ datadog-webhook                                            3
 
 ## Label and Annotate Deployments for APM Injection
 
-- **RESTART THE DEPLOYMENT AFTER ANNOTATING THE DEPLOYMENT**
-  - This will allow the mutatingwebhook admission controller to kick in for the APM library injection.
-
 <details>
 <summary>Click to toggle for steps</summary>
 
@@ -139,6 +136,44 @@ spec:
       serviceAccount: default
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
+```
+</details>
+
+- **RESTART THE DEPLOYMENT AFTER ANNOTATING THE DEPLOYMENT**
+  - This will allow the mutatingwebhook admission controller to kick in for the APM library injection.
+    
+## Validate the Library Injection
+
+<details>
+<summary>Click to toggle for steps</summary>
+  
+- [Validate Library Injection](https://docs.datadoghq.com/tracing/trace_collection/library_injection_local/?tab=kubernetes#check-that-the-library-injection-was-successful). Take a look at how you can validate that library injection is successful.
+
+OR
+
+- Use kubectl describe to validate library injection.
+```
+kubectl describe po -n <namespace> <podname>
+
+Init Containers:
+  datadog-lib-xxx-init:
+    Container ID:  containerd://b5dfce228e21c329fe1ea6e015de78c27350b78f2630d35f8bc2fbc512b06d89
+    Image:         gcr.io/datadoghq/dd-lib-xxx-init:v2.6.5
+    Image ID:      gcr.io/datadoghq/dd-lib-xxx-init@sha256:4612058685b72a2a0ca80fb9a23f1eb77b79341de7a8b79ced9b0671ec6482bd
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+      copy-lib.sh
+      /datadog-lib
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Tue, 27 Feb 2024 13:50:48 +0800
+      Finished:     Tue, 27 Feb 2024 13:51:02 +0800
+    Ready:          True
+    Restart Count:  0
+
 ```
 
 </details>
