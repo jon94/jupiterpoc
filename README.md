@@ -62,6 +62,8 @@ datadog-webhook                                            3
 <summary>Click to toggle for steps</summary>
 
 - Example Manifest
+  - Read [here](https://docs.datadoghq.com/getting_started/tagging/unified_service_tagging/?tab=kubernetes#containerized-environment) to understand more about how you can set up unified service tagging for easier correlation in Datadog.
+  - Example is already shown in example manifest below.
 
 ```YAML
 apiVersion: apps/v1
