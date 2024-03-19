@@ -46,6 +46,7 @@ datadog   3         3         3       3            3           kubernetes.io/os=
 ```
 
 - **Validate that the mutatingwebhookconfigurations for datadog is installed**
+  - This is required for the APM Library injection to work.
   
 ```
 kubectl get mutatingwebhookconfiguration
@@ -53,3 +54,86 @@ kubectl get mutatingwebhookconfiguration
 NAME                                                       WEBHOOKS  
 datadog-webhook                                            3          
 ```
+</details>
+
+## Label and Annotate Deployments for APM Injection
+
+<details>
+<summary>Click to toggle for steps</summary>
+
+- Example Manifest
+
+```YAML
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    tags.datadoghq.com/env: dev  # Add here for unified service tagging
+    tags.datadoghq.com/service: adservice # Add here for unified service tagging
+    tags.datadoghq.com/version: 1.0.0 # Add here for unified service tagging
+  name: adservice
+  namespace: default
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: adservice
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        admission.datadoghq.com/java-lib.version: v1.31.2 # Add here for APM lib injection
+      labels:
+        admission.datadoghq.com/enabled: "true" # Add here for APM lib injection
+        app: adservice
+        tags.datadoghq.com/env: dev   # Add here for unified service tagging
+        tags.datadoghq.com/service: adservice    # Add here for unified service tagging
+        tags.datadoghq.com/version: 1.0.0    # Add here for unified service tagging
+    spec:
+      containers:
+      - env:
+        - name: PORT
+          value: "9555"
+        - name: DD_INTEGRATION_KOTLIN_COROUTINE_EXPERIMENTAL_ENABLED    # Add here experimental kotlin coroutine
+          value: true        
+        image: docker.io/smazzone/adservice:a759553da31c4093c95a54403554188ec2ac229765d6c14405bbc18bce9825ae
+        imagePullPolicy: IfNotPresent
+        name: server
+        ports:
+        - containerPort: 9555
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 300m
+            memory: 300Mi
+          requests:
+            cpu: 200m
+            memory: 180Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - all
+          privileged: false
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+      serviceAccount: default
+      serviceAccountName: default
+      terminationGracePeriodSeconds: 5
+```
+
+</details>
