@@ -143,6 +143,10 @@ spec:
   - This will allow the mutatingwebhook admission controller to kick in for the APM library injection.
     
 ## Validate the Library Injection
+- If Library Injection does not work
+  - Make sure you check the labels and annotations
+  - Make sure you do a rolling restart on the deployment
+  - Check the firewall rules for your EKS cluster - see documentation [here](https://docs.datadoghq.com/containers/troubleshooting/admission-controller/?tab=helm#amazon-elastic-kubernetes-service-eks)
 
 <details>
 <summary>Click to toggle for steps</summary>
