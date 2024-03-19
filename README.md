@@ -1,10 +1,11 @@
-#jupiterpoc
+# Jupiter POC Datadog
 
 ## Install Datadog into EKS Clusters using Helm
 
-
 <details>
 <summary>Click to toggle for `steps`</summary>
+
+- Use values.yaml that can be found in [helm/values.yaml]()
 
 - Create Namespace 
 ```
