@@ -1,4 +1,4 @@
-# Jupiter POC Datadog
+# EKS Cluster Datadog Agent Installation + APM Library Injection via MutatingWebhookConfigurations Admission Controller
 
 ## Install Datadog into EKS Clusters using Helm
 
