@@ -69,6 +69,8 @@ datadog:
 clusterAgent:
 # clusterAgent.enabled -- Set this to false to disable Datadog Cluster Agent
   enabled: true
+  podAnnotations:
+    sidecar.istio.io/inject: "false"  
   replicas: 1  
 ## Define the Datadog Cluster-Agent image to work with
   image:
@@ -87,6 +89,8 @@ agents:
 ## Note: StatsD and DogStatsD work over UDP, so you may not
 ## get guaranteed delivery of the metrics in Datadog-per-namespace setup!
   enabled: true
+  podAnnotations:
+    sidecar.istio.io/inject: "false"  
   ## Define the Datadog image to work with
   image:
     # agents.image.name -- Datadog Agent image name to use (relative to `registry`)
