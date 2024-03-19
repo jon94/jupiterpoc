@@ -58,10 +58,13 @@ datadog-webhook                                            3
 
 ## Label and Annotate Deployments for APM Injection
 
+- **RESTART THE DEPLOYMENT AFTER ANNOTATING THE DEPLOYMENT**
+  - This will allow the mutatingwebhook admission controller to kick in for the APM library injection.
+
 <details>
 <summary>Click to toggle for steps</summary>
 
-- Example Manifest
+- **Example Manifest**
   - Read [here](https://docs.datadoghq.com/getting_started/tagging/unified_service_tagging/?tab=kubernetes#containerized-environment) to understand more about how you can set up unified service tagging for easier correlation in Datadog.
   - Example is already shown in example manifest below.
 
